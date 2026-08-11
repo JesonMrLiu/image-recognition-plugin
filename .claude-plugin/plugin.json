@@ -1,0 +1,22 @@
+{
+  "name": "image-recognition",
+  "version": "0.1.0",
+  "description": "OpenAI 兼容的识图能力：让非多模态模型（如 GLM-5.2）也能看图，特别适合结合原型图/UI 稿开发。",
+  "mcpServers": {
+    "vision": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "claude-image-recognition-mcp@^0.1.0"],
+      "env": {
+        "IMAGE_RECOGNITION_API_KEY": "${IMAGE_RECOGNITION_API_KEY}",
+        "IMAGE_RECOGNITION_BASE_URL": "${IMAGE_RECOGNITION_BASE_URL}",
+        "IMAGE_RECOGNITION_MODEL": "${IMAGE_RECOGNITION_MODEL}",
+        "IMAGE_RECOGNITION_DETAIL": "${IMAGE_RECOGNITION_DETAIL:-high}",
+        "IMAGE_RECOGNITION_MAX_TOKENS": "${IMAGE_RECOGNITION_MAX_TOKENS:-2048}",
+        "IMAGE_RECOGNITION_TIMEOUT_MS": "${IMAGE_RECOGNITION_TIMEOUT_MS:-60000}",
+        "IMAGE_RECOGNITION_DOWNLOAD_URL": "${IMAGE_RECOGNITION_DOWNLOAD_URL:-0}",
+        "IMAGE_RECOGNITION_MAX_FILE_MB": "${IMAGE_RECOGNITION_MAX_FILE_MB:-15}"
+      }
+    }
+  }
+}

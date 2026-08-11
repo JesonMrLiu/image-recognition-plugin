@@ -1,0 +1,17 @@
+{
+  "name": "image-recognition",
+  "owner": {
+    "name": "gangzi"
+  },
+  "metadata": {
+    "description": "OpenAI 兼容的识图 MCP 插件，让非多模态模型也能看图。"
+  },
+  "plugins": [
+    {
+      "name": "image-recognition",
+      "source": "./",
+      "description": "Vision recognition MCP server (OpenAI-compatible) + skill.",
+      "version": "0.1.0"
+    }
+  ]
+}

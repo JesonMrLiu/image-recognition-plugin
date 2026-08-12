@@ -11,7 +11,7 @@
       "name": "image-recognition",
       "source": "./",
       "description": "Vision recognition MCP server (OpenAI-compatible) + skill.",
-      "version": "0.1.0"
+      "version": "0.1.1"
     }
   ]
 }

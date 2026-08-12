@@ -1,6 +1,6 @@
 {
   "name": "image-recognition",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenAI 兼容的识图能力：让非多模态模型（如 GLM-5.2）也能看图，特别适合结合原型图/UI 稿开发。",
   "mcpServers": {
     "vision": {

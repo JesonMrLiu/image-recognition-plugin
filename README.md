@@ -1,6 +1,6 @@
 # image-recognition — Claude Code 识图插件
 
-让 Claude Code 里的**非多模态模型**（如 GLM-5.2）也能"看图"。
+让 Claude Code 里的**非多模态模型**（如 GLM-5.2、DeepSeek-V4）也能"看图"。
 
 通过一个走 **OpenAI 兼容协议**的识图 MCP server，把任意 OpenAI 兼容的视觉模型（GLM-4V、Qwen-VL、GPT-4o 等）接入 Claude Code。配套一个 skill，在你看图、识图、结合原型图/UI 稿开发时自动触发。
 
@@ -9,19 +9,19 @@
 | 仓库 | 作用 | 本仓库? |
 |---|---|---|
 | **image-recognition**（本仓库） | Claude Code 插件：skill + 插件清单，通过 `npx` 引用 MCP server | ✅ |
-| **image-recognition-mcp** | 独立 MCP server（TypeScript npm 包 `claude-image-recognition-mcp`） | ❌ 另一个仓库 |
+| **image-recognition-mcp** | 独立 MCP server（TypeScript npm 包 `@jesonliu/image-recognition-mcp`） | ❌ 另一个仓库 |
 
-本仓库**不含任何 JS 代码**。插件清单里的 `mcpServers.vision` 用 `npx -y claude-image-recognition-mcp@^0.1.0` 拉取已发布的 server，因此 git 安装本插件后开箱即用，无需 `npm install` / 构建步骤。
+本仓库**不含任何 JS 代码**。插件清单里的 `mcpServers.vision` 用 `npx -y @jesonliu/image-recognition-mcp` 拉取已发布的 server，因此 git 安装本插件后开箱即用，无需 `npm install` / 构建步骤。
 
 > MCP server 仓库地址：<在此填 image-recognition-mcp 的 git 地址>
-> 如需修改 server 行为，去那个仓库改源码、发新版、再升本仓库 `plugin.json` 里 `@^x.y.z` 的版本号。
+> 如需修改 server 行为，去那个仓库改源码、发新版；当前 `plugin.json` 未锁版本，`npx` 默认拉取最新版，如需固定可在 `args` 里写成 `@jesonliu/image-recognition-mcp@<版本号>`。
 
 ## 目录结构
 
 ```
 image-recognition/
 ├─ .claude-plugin/
-│  ├─ plugin.json          # 插件清单（mcpServers.vision → npx claude-image-recognition-mcp）
+│  ├─ plugin.json          # 插件清单（mcpServers.vision → npx @jesonliu/image-recognition-mcp）
 │  └─ marketplace.json     # 本地 / git 分发清单
 └─ skills/recognize-image/
    ├─ SKILL.md             # 触发识图的 skill（命名空间 mcp__plugin_image-recognition_vision__recognize_image）
@@ -64,13 +64,74 @@ image-recognition/
 
 ### 配置环境变量
 
-在系统环境变量或 Claude Code env 注入里设置三个必填项（示例为智谱 GLM-4V）：
+设置三个必填项（示例为智谱 GLM-4V）。两种方式任选其一。
+
+#### 方式 A：Claude Code `settings.json`（推荐，跨平台统一）
+
+在用户级 `~/.claude/settings.json` 或项目 `.claude/settings.local.json` 的 `env` 字段写入。Windows / Linux / macOS 通用，无需区分系统：
+
+```jsonc
+{
+  "env": {
+    "IMAGE_RECOGNITION_API_KEY": "你的key",
+    "IMAGE_RECOGNITION_BASE_URL": "https://open.bigmodel.cn/api/paas/v4",
+    "IMAGE_RECOGNITION_MODEL": "glm-4v-plus"
+  }
+}
+```
+
+#### 方式 B：系统环境变量
+
+##### Linux / macOS（bash / zsh）
+
+临时（当前终端会话）：
 
 ```bash
 export IMAGE_RECOGNITION_API_KEY=你的key
 export IMAGE_RECOGNITION_BASE_URL=https://open.bigmodel.cn/api/paas/v4
 export IMAGE_RECOGNITION_MODEL=glm-4v-plus
 ```
+
+永久（写入 shell 配置，重开终端生效）：
+
+```bash
+echo 'export IMAGE_RECOGNITION_API_KEY=你的key' >> ~/.bashrc   # bash
+echo 'export IMAGE_RECOGNITION_API_KEY=你的key' >> ~/.zshrc    # zsh（macOS 默认）
+```
+
+##### Windows
+
+PowerShell 临时（当前会话）：
+
+```powershell
+$env:IMAGE_RECOGNITION_API_KEY="你的key"
+$env:IMAGE_RECOGNITION_BASE_URL="https://open.bigmodel.cn/api/paas/v4"
+$env:IMAGE_RECOGNITION_MODEL="glm-4v-plus"
+```
+
+PowerShell 永久（当前用户，需重开终端）：
+
+```powershell
+[Environment]::SetEnvironmentVariable("IMAGE_RECOGNITION_API_KEY", "你的key", "User")
+[Environment]::SetEnvironmentVariable("IMAGE_RECOGNITION_BASE_URL", "https://open.bigmodel.cn/api/paas/v4", "User")
+[Environment]::SetEnvironmentVariable("IMAGE_RECOGNITION_MODEL", "glm-4v-plus", "User")
+```
+
+CMD（临时用 `set`，永久用 `setx`）：
+
+```cmd
+:: 临时（当前会话）
+set IMAGE_RECOGNITION_API_KEY=你的key
+set IMAGE_RECOGNITION_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+set IMAGE_RECOGNITION_MODEL=glm-4v-plus
+
+:: 永久（当前用户）
+setx IMAGE_RECOGNITION_API_KEY "你的key"
+setx IMAGE_RECOGNITION_BASE_URL "https://open.bigmodel.cn/api/paas/v4"
+setx IMAGE_RECOGNITION_MODEL "glm-4v-plus"
+```
+
+或图形界面：`系统属性 → 高级 → 环境变量 → 用户变量 → 新建`。
 
 ## 使用
 

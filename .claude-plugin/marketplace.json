@@ -1,7 +1,7 @@
 {
   "name": "image-recognition",
   "owner": {
-    "name": "gangzi"
+    "name": "JesonMrLiu"
   },
   "metadata": {
     "description": "OpenAI 兼容的识图 MCP 插件，让非多模态模型也能看图。"

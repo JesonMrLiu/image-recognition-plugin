@@ -3,7 +3,7 @@ name: recognize-image
 description: |
   使用 vision MCP 工具识图/分析图片。当用户让你看图、识图、识别图片内容，或在结合原型图 / UI 稿 / 截图 / 设计稿进行开发时使用。当前模型非多模态（如 GLM-5.2）但用户贴了图或需要"看"图时也触发。支持本地文件路径、图片 URL、剪贴板粘贴三种输入。
 allowed-tools:
-  - mcp__plugin_image-recognition_vision__recognize_image
+  - mcp__plugin_image-recognition_mcp__recognize_image
 argument-hint: "[图片路径或URL（或先用 Win+Shift+S 截图到剪贴板）] [你想让它做什么]"
 ---
 

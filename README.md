@@ -11,7 +11,7 @@
 | **image-recognition**（本仓库） | Claude Code 插件：skill + 插件清单，通过 `npx` 引用 MCP server | ✅ |
 | **image-recognition-mcp** | 独立 MCP server（TypeScript npm 包 `@jesonliu/image-recognition-mcp`） | ❌ 另一个仓库 |
 
-本仓库**不含任何 JS 代码**。插件清单里的 `mcpServers.vision` 用 `npx -y @jesonliu/image-recognition-mcp` 拉取已发布的 server，因此 git 安装本插件后开箱即用，无需 `npm install` / 构建步骤。
+本仓库**不含任何 JS 代码**。插件清单里的 `mcpServers.mcp` 用 `npx -y @jesonliu/image-recognition-mcp` 拉取已发布的 server，因此 git 安装本插件后开箱即用，无需 `npm install` / 构建步骤。
 
 > MCP server 仓库地址：<在此填 image-recognition-mcp 的 git 地址>
 > 如需修改 server 行为，去那个仓库改源码、发新版；当前 `plugin.json` 未锁版本，`npx` 默认拉取最新版，如需固定可在 `args` 里写成 `@jesonliu/image-recognition-mcp@<版本号>`。
@@ -21,10 +21,10 @@
 ```
 image-recognition/
 ├─ .claude-plugin/
-│  ├─ plugin.json          # 插件清单（mcpServers.vision → npx @jesonliu/image-recognition-mcp）
+│  ├─ plugin.json          # 插件清单（mcpServers.mcp → npx @jesonliu/image-recognition-mcp）
 │  └─ marketplace.json     # 本地 / git 分发清单
 └─ skills/recognize-image/
-   ├─ SKILL.md             # 触发识图的 skill（命名空间 mcp__plugin_image-recognition_vision__recognize_image）
+   ├─ SKILL.md             # 触发识图的 skill（命名空间 mcp__plugin_image-recognition_mcp__recognize_image）
    └─ references/          # 场景化 prompt 模板（UI→代码 / 原型→需求 / 通用描述）
 ```
 
@@ -59,7 +59,7 @@ image-recognition/
 在项目 `.claude/settings.local.json`：
 
 ```jsonc
-{ "enabledMcpjsonServers": ["vision"] }
+{ "enabledMcpjsonServers": ["mcp"] }
 ```
 
 ### 配置环境变量
@@ -133,15 +133,17 @@ setx IMAGE_RECOGNITION_MODEL "glm-4v-plus"
 
 或图形界面：`系统属性 → 高级 → 环境变量 → 用户变量 → 新建`。
 
+> ⚠️ `setx` / 系统属性 GUI 设置后，**必须新开一个终端窗口**再启动 `claude`；已运行的终端和 Claude Code 会话不会自动刷新环境变量（这是 Windows 的行为，不是插件问题）。若不便重启，改用「方式 A」把变量写进 `settings.json` 的 `env`，Claude Code 启动时会主动注入进程环境。
+
 ## 使用
 
 在 Claude Code 里直接说：
 
 > "看下这张图 D:/proto/login.png，把登录表单转成 React 组件"
 
-会自动触发 `recognize-image` skill → 调用 `recognize_image` 工具。`/mcp` 里可确认 `vision` server 已 connected。
+会自动触发 `recognize-image` skill → 调用 `recognize_image` 工具。`/mcp` 里可确认 `mcp` server 已 connected。
 
-插件形态下工具命名空间：`mcp__plugin_image-recognition_vision__recognize_image`。
+插件形态下工具命名空间：`mcp__plugin_image-recognition_mcp__recognize_image`。
 
 ## 不装插件、只用 MCP server
 
